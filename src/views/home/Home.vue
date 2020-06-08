@@ -3,53 +3,16 @@
   <nav-bar class="home-nav">
     <div slot="center">购物街</div>
   </nav-bar>
-  <home-swiper :banners='banners'/>
-  <home-recommend-view :recommends='recommends' />
-  <feature-view/>
-  <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
-  <goods-list :goods='goods[currentType].list' />
-  <ul>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-    <li>111</li>
-  </ul>
-
+  
+  <BScroll class="content" ref="scroll" :probe-type="3"
+  @scroll="contentScroll" @pullingUp='loadMore'>
+    <home-swiper :banners='banners'/>
+    <home-recommend-view :recommends='recommends' />
+    <feature-view/>
+    <tab-control class="tab-control" :titles="['流行','新款','精选']" @tabClick="tabClick"/>
+    <goods-list :goods='goods[currentType].list' />
+  </BScroll>
+  <back-top @click.native="backClick" v-show="isShowBackTop"/>
 </div>
 </template>
 
@@ -57,6 +20,8 @@
 import NavBar from '../../components/common/navbar/NavBar'
 import TabControl from '../../components/content/tabControl/TabControl'
 import GoodsList from '../../components/content/goods/GoodsList'
+import BScroll from '../../components/common/scroll/Scroll'
+import BackTop from '../../components/content/backTop/BackTop'
 
 import HomeSwiper from './childComps/HomeSwiper'
 import HomeRecommendView from './childComps/HomeRecommendView'
@@ -70,6 +35,8 @@ import {getHomeMullData,getHomeGoods} from "../../network/home"
       NavBar,
       TabControl,
       GoodsList,
+      BScroll,
+      BackTop,
       HomeSwiper,
       HomeRecommendView,
       FeatureView
@@ -83,7 +50,8 @@ import {getHomeMullData,getHomeGoods} from "../../network/home"
           'new': {page: 0,list: []},//新款
           'sell': {page: 0,list: []},//精选
         },
-        currentType: 'pop'
+        currentType: 'pop',
+        isShowBackTop: false
       }
     },
     created() {
@@ -124,8 +92,24 @@ import {getHomeMullData,getHomeGoods} from "../../network/home"
         getHomeGoods(type,page).then(res =>{
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
+
+        this.$refs.scroll.finishPullUp()
+        this.$refs.scroll.scroll.refresh()//重新计算better-scroll
+
       })
       },
+      backClick() {
+        //console.log(this.$refs.scroll)
+        this.$refs.scroll.scrollTo(0,0)
+      },
+      contentScroll(position) {
+        console.log(position.y)
+        this.isShowBackTop = (-position.y) > 1000
+      },
+      loadMore() {
+        //console.log('加载更多')
+        this.getHomeGoods(this.currentType)
+      }
 
     },
   }
@@ -134,6 +118,20 @@ import {getHomeMullData,getHomeGoods} from "../../network/home"
 <style scoped>
 #home{
   padding-top: 44px;
+  height: 100vh;
+  position: relative;
+  
+}
+/* .content{
+ height: calc(100% - 49px);
+ overflow: hidden;
+} */
+.content{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 44px;
+  bottom: 49px;
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -146,8 +144,8 @@ import {getHomeMullData,getHomeGoods} from "../../network/home"
   top: 0;
 }
 .tab-control{
-  position: sticky;
-  top: 44px;
+  /* position: sticky; */
+  top: 40px;
   z-index: 3;
 }
 </style>
