@@ -2,7 +2,9 @@
 <div>
   <Swiper>
     <SwiperItem v-for="(item, index) in banners" :key="index">
-      <a :href="item.link"><img :src="item.image" alt=""></a>
+      <a :href="item.link">
+        <img :src="item.image" alt="" @load="imageLoad(index)" >
+      </a>
     </SwiperItem>
   </Swiper>
 </div>
@@ -24,6 +26,15 @@ export default {
     components: {
         Swiper, 
         SwiperItem
+    },
+
+    methods: {
+      imageLoad(index) {//第二张图片加载完，结构已经完成
+        if (index === 1) {
+          this.$emit('swiperImageLoad')
+        }
+        
+      }
     }
 }
 </script>

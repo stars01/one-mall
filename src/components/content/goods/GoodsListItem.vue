@@ -1,7 +1,7 @@
 <!--  -->
 <template>
-    <div class='goods-item'>
-        <img :src="goodsItem.show.img" alt="">
+    <div class='goods-item' @click="itemClick">
+        <img :src="goodsItem.show.img" alt="" @load="imageLoad">
         <div class="goods-info">
         <p>{{goodsItem.title}}</p>
         <span class="price">{{goodsItem.price}}</span>
@@ -28,6 +28,14 @@ export default {
 //这里存放数据
         return {};
     },
+    methods: {
+      imageLoad() {
+        this.$bus.$emit('itemImageLoad')
+      },
+      itemClick() {
+        this.$router.push('/detail/' + this.goodsItem.iid)
+      }
+    }
 }
 </script>
 
