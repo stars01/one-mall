@@ -1,7 +1,7 @@
 <!--  -->
 <template>
     <div class='goods-item' @click="itemClick">
-        <img :src="goodsItem.show.img" alt="" @load="imageLoad">
+        <img :src="showImage" alt="" @load="imageLoad">
         <div class="goods-info">
         <p>{{goodsItem.title}}</p>
         <span class="price">{{goodsItem.price}}</span>
@@ -28,13 +28,20 @@ export default {
 //这里存放数据
         return {};
     },
+    computed: {
+      showImage() {
+        return this.goodsItem.image || this.goodsItem.show.img
+        //疑问，为何顺序是固定的。猜测home页面缓存没有销毁,存在但为空值？？？
+        //Detail界面数据关闭销毁，打开请求，故没有缓存之类
+      }
+    },
     methods: {
       imageLoad() {
         this.$bus.$emit('itemImageLoad')
       },
       itemClick() {
         this.$router.push('/detail/' + this.goodsItem.iid)
-      }
+      },
     }
 }
 </script>

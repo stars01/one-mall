@@ -35,6 +35,7 @@ import FeatureView from './childComps/FeatureView'
 
 import {getHomeMullData,getHomeGoods} from "../../network/home"
 import {debounce} from '../../common/utils'
+import {itemListenerMixin} from '../../common/mixin'
 
   export default {
     name: "Home",
@@ -48,6 +49,7 @@ import {debounce} from '../../common/utils'
       HomeRecommendView,
       FeatureView
     },
+    mixins:[itemListenerMixin],
     data() {
       return{
         banners: [],
@@ -61,30 +63,31 @@ import {debounce} from '../../common/utils'
         isShowBackTop: false,
         tabOffsetTop: 0,
         isTabShow: false,
-        saveY: 0
+        saveY: 0,
+        //itemImageListener: null
       }
     },
     created() {
-      //请求数据,加this才是调用methods中方法
+      //请求数据,加this才是调用methods中方法，
       this.getHomeMullData()
       //请求商品数据
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
     },
-    mounted() {
-      //图片加载完成的监听
-        const refresh = debounce(this.$refs.scroll.refresh,50)
-      this.$bus.$on('itemImageLoad',() => {
-        refresh()//重新计算better-scroll
-      })
-    },
+    // mounted() {
+    //   //图片加载完成的监听，使用混入
+    //     const newRefresh = debounce(this.$refs.scroll.refresh,50)
+    //     this.itemImageListener = () => {newRefresh()}//重新计算better-scroll
+    //     this.$bus.$on('itemImageLoad',this.itemImageListener)
+    // },
     activated() {//被 keep-alive 缓存的组件激活时调用。
-      this.$refs.scroll.scrollTo(0,this.saveY,0)
+      this.$refs.scroll.scrollTo(0,this.saveY,10) //第三项参数设置为零，有一点几率跳转到顶端
       this.$refs.scroll.refresh()
     },
     deactivated() {//被 keep-alive 缓存的组件停用时调用。
       this.saveY = this.$refs.scroll.scroll.y
+      //this.$bus.off('itemImageLoad',this.itemImageListener) 找不到函数？？？
     },
     methods: {
       //自定义事件监听
