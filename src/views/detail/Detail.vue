@@ -13,7 +13,7 @@
             <detail-comment-info :commentInfo='commentInfo' ref="comment"></detail-comment-info>
             <goods-list :goods='recommends' ref="recommend" />
         </scroll>
-        <detail-bottom-bar/>
+        <detail-bottom-bar @addToCart='addToCart'/>
         <back-top @click.native="backClick" v-show="isShowBackTop"/>
     </div>
 </template>
@@ -111,6 +111,19 @@ export default {
         backClick() {
             this.$refs.scroll.scrollTo(0,0)
         },
+        addToCart() {
+            //创建商品信息对象
+            const cartObj = {}
+            cartObj.iid = this.iid
+            cartObj.imgURL = this.topImages[0]
+            cartObj.title = this.goods.title
+            cartObj.desc = this.goods.desc;
+            cartObj.Price = this.goods.realPrice;
+
+            //把数据交给Vuex，添加到购物车
+            // this.$store.commit('addCart',cartObj)
+            this.$store.dispatch('addCart',cartObj)
+        }
     },
 
     created() {
@@ -136,7 +149,6 @@ export default {
                 this.commentInfo = data.rate.list[0]
             }
             getRecommend().then((res) => {
-                console.log(res)
                 this.recommends = res.data.list
             })
         })
@@ -170,6 +182,7 @@ export default {
 }
 .content {
     height: calc(100% - 100px);
+    overflow: hidden;
 }
 .detail-nav {
     position: relative;
