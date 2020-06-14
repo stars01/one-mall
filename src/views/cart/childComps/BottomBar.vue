@@ -6,7 +6,7 @@
             <span>全选</span>
         </div>
         <span class="bottom-bar-center">合计￥{{allPrice}}</span>
-        <span class="bottom-bar-right">去结算({{checkLendth}})</span>
+        <span class="bottom-bar-right" @click="balance">去结算({{checkLendth}})</span>
     </div>
 </template>
 
@@ -51,6 +51,12 @@ export default {
     methods: {
         allSelector() {
             this.$store.dispatch('allSelector',this.allCheck)
+        },
+        balance() {
+            
+            if(this.checkLendth === 0) {
+                this.$toast.toastShow('没有选择商品')
+            }
         }
     },
 }

@@ -33,9 +33,13 @@ export default {
     width: 22px;
     border-radius:50%;
     border:1px solid #aaa;
+
 }
 .selector img {
     width: 20px;
+    position: relative;
+    top: -2px;
+    left: 0px;
 }
 .selector-active {
     background-color: #ff829b;

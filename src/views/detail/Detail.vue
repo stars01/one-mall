@@ -122,7 +122,11 @@ export default {
 
             //把数据交给Vuex，添加到购物车
             // this.$store.commit('addCart',cartObj)
-            this.$store.dispatch('addCart',cartObj)
+            this.$store.dispatch('addCart',cartObj).then(res => {
+                // console.log(this.$toast)
+                //toast 弹窗
+                this.$toast.toastShow(res)
+            })
         }
     },
 
