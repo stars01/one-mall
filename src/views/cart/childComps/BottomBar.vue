@@ -76,6 +76,7 @@ line-height: 40px;
 background-color: #e6e6e6;
 }
 .bottom-bar-left {
+    margin-left: 8px;
     width: 60px;
     display: flex;
 }

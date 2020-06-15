@@ -30,7 +30,7 @@ import {mapGetters} from 'vuex'
 
 <style scoped>
 .nav-bar {
-  background-color: #ff81c0;
+  background-color: var(--color-tint);
   color: #fff;
 }
 </style>

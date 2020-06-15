@@ -30,6 +30,7 @@ export default {
     },
     computed: {
       showImage() {
+        if(this.goodsItem.img) return this.goodsItem.img
         return this.goodsItem.image || this.goodsItem.show.img
         //疑问，为何顺序是固定的。猜测home页面缓存没有销毁,存在但为空值？？？
         //Detail界面数据关闭销毁，打开请求，故没有缓存之类
