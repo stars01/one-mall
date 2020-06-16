@@ -41,7 +41,7 @@
 }
 .user-info-right img {
   width: 40px;
-  padding-top: 40px;
+  padding-top: 43px;
   
 }
 </style>

@@ -18,6 +18,7 @@
       <p>我的积分</p>
     </div>
   </div>
+  <list-view/>
   </div>
 </template>
 
@@ -25,6 +26,7 @@
 import NavBar from '../../components/common/navbar/NavBar'
 
 import UserInfo from './childComps/UserInfo'
+import ListView from './childComps/ListView'
 
   export default {
     name: "Profile",
@@ -37,7 +39,8 @@ import UserInfo from './childComps/UserInfo'
     },
     components: {
       NavBar,
-      UserInfo
+      UserInfo,
+      ListView
     }
   }
 </script>
